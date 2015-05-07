@@ -1592,7 +1592,7 @@ if __name__=='__main__':
 				
 			
 			# Extract Statistics from the skymodel
-			#selfCalRun_Obj.selfCalRunFuncStatistics()
+			selfCalRun_Obj.selfCalRunFuncStatistics()
 
 			
 
@@ -1712,7 +1712,7 @@ if __name__=='__main__':
 
 
     # Extract Statistics from the skymodel
-    #selfCalRun_Obj.selfCalRunFuncStatistics()
+    selfCalRun_Obj.selfCalRunFuncStatistics()
 
 
 	####################################################################
