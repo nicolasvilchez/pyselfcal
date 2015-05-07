@@ -10,9 +10,9 @@ import pyrap.tables as pt
 import numpy as np
 
 # Import local modules (classes)
-from lofar.selfcal import old_class_obsparMergedData
-from lofar.selfcal import old_class_selfcalparam
-from lofar.selfcal import old_class_selfcalrun  
+from selfcal import old_class_obsparMergedData
+from selfcal import old_class_selfcalparam
+from selfcal import old_class_selfcalrun  
 
 
 
