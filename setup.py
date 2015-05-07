@@ -19,6 +19,7 @@ setup(
                    "using the LOFAR software stack (DPPP, BBS, awimager."),
     packages=['pyselfcal'],
     scripts=[pjoin('bin','selfcal.py'), pjoin('bin','old_selfcal.py'), pjoin('bin','mergeSB.py')],
-    install_requires=['pyvo','LSMTool'],
-    dependency_links=['https://github.com/darafferty/LSMTool/tarball/master#egg=LSMTool-1.0.0'],
+    install_requires=['pyvo>=0.1','LSMTool'],
+    dependency_links=['https://github.com/darafferty/LSMTool/tarball/master#egg=LSMTool-1.0.0',
+                      'https://github.com/pyvirtobs/pyvo/tarball/master#egg=pyvo-0.1' ],
 )
