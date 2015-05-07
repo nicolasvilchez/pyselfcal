@@ -18,8 +18,8 @@ import numpy as np
 ########################################################################
 # Import local modules (classes)
 ########################################################################
-from selfcal import class_obspar
-from selfcal import class_mergesubbands
+from pyselfcal import class_obspar
+from pyselfcal import class_mergesubbands
 
 #import class_obspar
 #import class_mergesubbands    

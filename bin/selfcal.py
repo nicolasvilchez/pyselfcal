@@ -19,12 +19,12 @@ import getopt
 # Import local modules (classes)
 ########################################################################
 
-from selfcal import class_obsparMergedData
-from selfcal import class_obsPreprocessing
-from selfcal import class_selfcalPeeling
-from selfcal import class_selfcalparam
-from selfcal import class_selfcalrun 
-from selfcal import class_dataInit 
+from pyselfcal import class_obsparMergedData
+from pyselfcal import class_obsPreprocessing
+from pyselfcal import class_selfcalPeeling
+from pyselfcal import class_selfcalparam
+from pyselfcal import class_selfcalrun 
+from pyselfcal import class_dataInit 
 
 #import class_obsparMergedData
 #import class_obsPreprocessing

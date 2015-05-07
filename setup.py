@@ -11,13 +11,13 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name = "SelfCal for LOFAR images",
+    name = "pyselfcal",
     version = "0.0.1",
     author = "Nicolas Vilchez",
     author_email = "vilchez@astron.nl",
     description = ("A tool to run the selfcal cycle for lofar images, "
                    "using the LOFAR software stack (DPPP, BBS, awimager."),
-    packages=['selfcal'],
+    packages=['pyselfcal'],
     scripts=[pjoin('bin','selfcal.py'), pjoin('bin','old_selfcal.py'), pjoin('bin','mergeSB.py')],
     install_requires=['pyvo','LSMTool'],
     dependency_links=['https://github.com/darafferty/LSMTool/tarball/master#egg=LSMTool-1.0.0'],

@@ -31,10 +31,10 @@ import lofar.bdsm as bdsm
 #import Statistics modules
 ########################################################################
 
-#from selfcal import LSM_module.pyvo.pyvo
-#from selfcal import LSM_module.module.lsmtool as lsmtool	
-import selfcal.LSM_module.pyvo.pyvo
-import selfcal.LSM_module.module.lsmtool as lsmtool
+#from pyselfcal import LSM_module.pyvo.pyvo
+#from pyselfcal import LSM_module.module.lsmtool as lsmtool	
+import pyvo
+import lsmtool
 
 #LSM Tools
 #import LSM_module.pyvo.pyvo

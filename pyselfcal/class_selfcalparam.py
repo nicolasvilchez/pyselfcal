@@ -20,7 +20,7 @@ import numpy as np
 # Extra modules
 ########################################################################
 
-from selfcal import class_obsPreprocessing
+from pyselfcal import class_obsPreprocessing
 
 #import class_obsPreprocessing
 
