@@ -1,5 +1,7 @@
 import os
+import multiprocessing
 from setuptools import setup
+from os.path import join as pjoin
 
 # Utility function to read the README file.
 # Used for the long_description.  It's nice, because now 1) we have a top level
@@ -16,4 +18,7 @@ setup(
     description = ("A tool to run the selfcal cycle for lofar images, "
                    "using the LOFAR software stack (DPPP, BBS, awimager."),
     packages=['selfcal'],
+    scripts=[pjoin('bin','selfcal.py'), pjoin('bin','old_selfcal.py'), pjoin('bin','mergeSB.py')],
+    install_requires=['pyvo','LSMTool'],
+    dependency_links=['https://github.com/darafferty/LSMTool/tarball/master#egg=LSMTool-1.0.0'],
 )
