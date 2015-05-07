@@ -8,7 +8,9 @@ python_install(
   class_obsparMergedData.py
   class_obspar.py
   class_selfcalparam.py
-  class_selfcalrun.py 
+  class_selfcalrun.py
+  class_dataInit.py
+  class_selfcalPeeling.py 
   old_class_obsparMergedData.py
   old_class_selfcalparam.py
   old_class_selfcalrun.py
