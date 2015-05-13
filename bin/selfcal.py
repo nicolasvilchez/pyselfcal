@@ -26,12 +26,13 @@ from pyselfcal import class_selfcalparam
 from pyselfcal import class_selfcalrun 
 from pyselfcal import class_dataInit 
 
-#import class_obsparMergedData
-#import class_obsPreprocessing
-#import class_selfcalPeeling
-#import class_selfcalparam
-#import class_selfcalrun  
-#import class_dataInit
+
+########################################################################
+
+cmd_xvfb	= 'Xvfb :99 -ac &'
+os.system(cmd_xvfb)  				# Start Xvfb
+os.environ['DISPLAY']=':99' 		# set DISPLAY
+
 
 ########################################################################
 #							OVERVIEW
