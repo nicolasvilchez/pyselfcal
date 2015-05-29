@@ -29,9 +29,10 @@ from pyselfcal import class_dataInit
 
 ########################################################################
 
-cmd_xvfb	= 'Xvfb :99 -ac &'
-os.system(cmd_xvfb)  				# Start Xvfb
-os.environ['DISPLAY']=':99' 		# set DISPLAY
+if 'DISPLAY' not in os.environ or os.environ['DISPLAY']='':
+  cmd_xvfb	= 'Xvfb :99 -ac &'
+  os.system(cmd_xvfb)  				# Start Xvfb
+  os.environ['DISPLAY']=':99' 		# set DISPLAY
 
 
 ########################################################################
