@@ -28,11 +28,25 @@ from pyselfcal import class_dataInit
 
 
 ########################################################################
+# Change $DISPLAY for a Fake X-server for LSM tools functionning well 
+########################################################################
 
-if 'DISPLAY' not in os.environ or os.environ['DISPLAY']=='':
-  cmd_xvfb	= 'Xvfb :99 -ac &'
-  os.system(cmd_xvfb)  				# Start Xvfb
-  os.environ['DISPLAY']=':99' 		# set DISPLAY
+
+PID = os.getppid()
+
+cmd_xvfb	= 'Xvfb :%s -ac &'%(PID)
+os.system(cmd_xvfb)  					# Start Xvfb
+os.environ['DISPLAY']=':%s'%(PID) 		# set DISPLAY
+
+print '###################################################'
+print 'Change $DISPLAY Value for LSM Tool => Fake X-server' 
+print ''
+print 'echo $DISPLAY: ',os.environ['DISPLAY']
+print 'Selfcal process ID: %s'%(PID)
+print ''
+print '###################################################'
+
+
 
 
 ########################################################################
