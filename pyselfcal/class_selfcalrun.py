@@ -313,7 +313,7 @@ class selfCalRun:
 				cmd7	= """gaincal.sourcedb=%s%s/sky\n"""%(self.IterDir,files_process)
 				cmd10	= """gaincal.parmdb=%s%s/instrument\n"""%(self.IterDir,files_process)
 						
-		cmd2	= """msin.datacolumn=CORRECTED_DATA\n"""
+		cmd2	= """msin.datacolumn=DATA\n"""
 		cmd3	= """msout=.\n"""
 		cmd4	= """steps=[gaincal]\n"""
 		cmd5	= """gaincal.type=gaincal\n"""
@@ -614,15 +614,24 @@ class selfCalRun:
 							#extract the source model with pybdsm
 							img	=  bdsm.process_image("""%sTemporary_Image_%sarcsec_Iter%s.restored.corr"""%(self.ImagePathDir,self.pixsize[self.i],self.i),adaptive_rms_box='True',advanced_opts='True',detection_image="""%sTemporary_Image_%sarcsec_Iter%s.restored"""%(self.ImagePathDir,self.pixsize[self.i],self.i),thresh_isl='%s'%(self.thresh_isl),thresh_pix='%s'%(self.thresh_pix),rms_box=(self.RMS_BOX[0],self.RMS_BOX[1]),rms_box_bright=(self.RMS_BOX_Bright[0],self.RMS_BOX_Bright[1]),adaptive_thresh=30,blank_limit=1E-4,atrous_do='True',ini_method='curvature')#,psf_vary_do='True',psf_stype_only='False',psf_snrcut=5,psf_snrcutstack=5,psf_snrtop=0.3) 
 							
+							#Skymodel
 							#write bbs catalog
-							img.write_catalog(outfile="""%sTemporary_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
+							img.write_catalog(outfile="""%sTemporary_Pybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
 
 							#write ds9 catalog
-							img.write_catalog(outfile="""%sTemporary_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
+							img.write_catalog(outfile="""%sTemporary_Pybdsm_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
+							
 
+							#Catalog
+							#write ds9 catalog
+							img.write_catalog(outfile="""%sTemporary_Catalog_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='ds9',correct_proj='True',clobber='True')
 
 							#write fits catalog
-							img.write_catalog(outfile="""%sTemporary_Skymodel_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='fits',correct_proj='True',clobber='True')
+							img.write_catalog(outfile="""%sTemporary_Catalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
+
+							#write bbs catalog
+							img.write_catalog(outfile="""%sTemporary_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
+							
 
 							# Extract the mask in fits format
 							img.export_image(outfile="""%sMask_Iter%s.casa"""%(self.SkymodelPath,self.i+1),img_format='casa',img_type='island_mask',mask_dilation=self.maskDilation)
@@ -639,19 +648,29 @@ class selfCalRun:
 							#extract the source model with pybdsm
 							img	=  bdsm.process_image("""%sTemporary_Final_Image_%sarcsec_Iter%s.restored.corr"""%(self.ImagePathDir,self.pixsize[self.i-1],self.i),adaptive_rms_box='True',advanced_opts='True',detection_image="""%sTemporary_Final_Image_%sarcsec_Iter%s.restored"""%(self.ImagePathDir,self.pixsize[self.i-1],self.i),thresh_isl='%s'%(self.thresh_isl),thresh_pix='%s'%(self.thresh_pix),rms_box=(self.RMS_BOX[0],self.RMS_BOX[1]),rms_box_bright=(self.RMS_BOX_Bright[0],self.RMS_BOX_Bright[1]),adaptive_thresh=30,blank_limit=1E-4,atrous_do='True',ini_method='curvature')#,psf_vary_do='True',psf_stype_only='False',psf_snrcut=5,psf_snrcutstack=5,psf_snrtop=0.3) 
 							
-							#write bbs catalog
-							img.write_catalog(outfile="""%sTemporary_Final_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
+							
+							#Skymodel
+							#write bbs Skymodel
+							img.write_catalog(outfile="""%sTemporary_Final_Pybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
 
+							#write ds9 Skymodel
+							img.write_catalog(outfile="""%sTemporary_Final_Pybdsm_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
+
+
+							#Catalog
 							#write ds9 catalog
-							img.write_catalog(outfile="""%sTemporary_Final_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
-
+							img.write_catalog(outfile="""%sTemporary_Final_Catalog_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='ds9',correct_proj='True',clobber='True')
 
 							#write fits catalog
-							img.write_catalog(outfile="""%sTemporary_Final_Skymodel_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='fits',correct_proj='True',clobber='True')
-							
-							
+							img.write_catalog(outfile="""%sTemporary_Final_Catalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
+
+							#write ds9 catalog
+							img.write_catalog(outfile="""%sTemporary_Final_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='ds9',correct_proj='True',clobber='True')
+														
+														
 							# Extract the mask in fits format
 							img.export_image(outfile="""%sFinal_Mask_Iter%s.casa"""%(self.SkymodelPath,self.i+1),img_format='casa',img_type='island_mask',mask_dilation=self.maskDilation)
+
 
 
 				# 1: cleaning with mask			
@@ -666,35 +685,39 @@ class selfCalRun:
 				
 						#extract the source model with pybdsm
 						img	=  bdsm.process_image("""%sImage_%sarcsec_Iter%s.restored.corr"""%(self.ImagePathDir,self.pixsize[self.i],self.i),adaptive_rms_box='True',advanced_opts='True',detection_image="""%sImage_%sarcsec_Iter%s.restored"""%(self.ImagePathDir,self.pixsize[self.i],self.i),thresh_isl='%s'%(self.thresh_isl),thresh_pix='%s'%(self.thresh_pix),rms_box=(self.RMS_BOX[0],self.RMS_BOX[1]),rms_box_bright=(self.RMS_BOX_Bright[0],self.RMS_BOX_Bright[1]),adaptive_thresh=30,blank_limit=1E-4,atrous_do='True',ini_method='curvature')#,psf_vary_do='True',psf_stype_only='False',psf_snrcut=5,psf_snrcutstack=5,psf_snrtop=0.3) 
+
 						
-						#write bbs catalog
-						img.write_catalog(outfile="""%sSkymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
+						#Skymodel
+						#write bbs Skymodel
+						img.write_catalog(outfile="""%sPybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
 
+						#write ds9 Skymodel
+						img.write_catalog(outfile="""%sPybdsm_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
+
+
+						#Catalog
 						#write ds9 catalog
-						img.write_catalog(outfile="""%sSkymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
-
+						img.write_catalog(outfile="""%sCatalog_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='ds9',correct_proj='True',clobber='True')
 
 						#write fits catalog
-						img.write_catalog(outfile="""%sSkymodel_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='fits',correct_proj='True',clobber='True')
+						img.write_catalog(outfile="""%sCatalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
+						
+						#write fits catalog
+						img.write_catalog(outfile="""%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
+												
 						
 						
 						# Store the path of the Skymodel and value to exploit
 						#Skymodel path
-						self.statisticsSkymodelCurrent 		= """%sPybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1)
+						self.statisticsSkymodelCurrent 		= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1)
 						if self.i !=0:
-							self.statisticsSkymodelPrevious	= """%sPybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i)					
+							self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)					
 						# Values
 						self.rmsclipped						= img.clipped_rms
 						self.Mean							= img.clipped_mean
 						self.TotalFlux						= img.total_flux_gaus
 						
 						
-						# Copy pybdsm extracted Skymodel as a save
-						cmd_cp	= """cp %sSkymodel_Iter%s  %sPybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1,self.SkymodelPath,self.i+1)
-						print ''
-						print cmd_cp
-						print ''
-						os.system(cmd_cp)
 						
 						# convert dot model to BBS format
 						convert_cmd="""casapy2bbs.py --mask=%sMask_Iter%s.casa %sImage_%sarcsec_Iter%s.model.corr  %sSkymodel_Iter%s"""%(self.SkymodelPath,self.i+1,self.ImagePathDir,self.pixsize[self.i],self.i,self.SkymodelPath,self.i+1)
@@ -716,32 +739,36 @@ class selfCalRun:
 						#extract the source model with pybdsm
 						img	=  bdsm.process_image("""%sFinal_Image_%sarcsec_Iter%s.restored.corr"""%(self.ImagePathDir,self.pixsize[self.i-1],self.i),adaptive_rms_box='True',advanced_opts='True',detection_image="""%sFinal_Image_%sarcsec_Iter%s.restored"""%(self.ImagePathDir,self.pixsize[self.i-1],self.i),thresh_isl='%s'%(self.thresh_isl),thresh_pix='%s'%(self.thresh_pix),rms_box=(self.RMS_BOX[0],self.RMS_BOX[1]),rms_box_bright=(self.RMS_BOX_Bright[0],self.RMS_BOX_Bright[1]),adaptive_thresh=30,blank_limit=1E-4,atrous_do='True',ini_method='curvature')#,psf_vary_do='True',psf_stype_only='False',psf_snrcut=5,psf_snrcutstack=5,psf_snrtop=0.3) 
 						
-						#write bbs catalog
-						img.write_catalog(outfile="""%sFinal_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
+						
+						#Skymodel
+						#write bbs Skymodel
+						img.write_catalog(outfile="""%sFinal_Pybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
 
+						#write ds9 Skymodel
+						img.write_catalog(outfile="""%sFinal_Pybdsm_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
+
+
+						#Catalog
 						#write ds9 catalog
-						img.write_catalog(outfile="""%sFinal_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
+						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='ds9',correct_proj='True',clobber='True')
 
 						#write fits catalog
-						img.write_catalog(outfile="""%sFinal_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='fits',correct_proj='True',clobber='True')
+						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
+
+						#write BBS catalog
+						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
+
 
 
 						# Store the path of the Skymodel and value to exploit
 						# Skymodel path
-						self.statisticsSkymodelCurrent 	= """%sPybdsm_Final_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1)
-						self.statisticsSkymodelPrevious	= """%sPybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i)
+						self.statisticsSkymodelCurrent 	= """%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1)
+						self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)
 						# Values
 						self.rmsclipped						= img.clipped_rms
 						self.Mean							= img.clipped_mean
 						self.TotalFlux						= img.total_flux_gaus					
 
-
-						# Copy pybdsm extracted Skymodel as a save
-						cmd_cp	= """cp %sFinal_Skymodel_Iter%s  %sPybdsm_Final_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1,self.SkymodelPath,self.i+1)
-						print ''
-						print cmd_cp
-						print ''
-						os.system(cmd_cp)
 						
 						# convert dot model to BBS format						
 						convert_cmd="""casapy2bbs.py --mask=%sFinal_Mask_Iter%s.casa %sFinal_Image_%sarcsec_Iter%s.model.corr  %sFinal_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1,self.ImagePathDir,self.pixsize[self.i-1],self.i,self.SkymodelPath,self.i+1)
@@ -766,22 +793,32 @@ class selfCalRun:
 						#extract the source model with pybdsm
 						img	=  bdsm.process_image("""%sImage_%sarcsec_Iter%s.restored.corr"""%(self.ImagePathDir,self.pixsize[self.i],self.i),adaptive_rms_box='True',advanced_opts='True',detection_image="""%sImage_%sarcsec_Iter%s.restored"""%(self.ImagePathDir,self.pixsize[self.i],self.i),thresh_isl='%s'%(self.thresh_isl),thresh_pix='%s'%(self.thresh_pix),rms_box=(self.RMS_BOX[0],self.RMS_BOX[1]),rms_box_bright=(self.RMS_BOX_Bright[0],self.RMS_BOX_Bright[1]),adaptive_thresh=30,blank_limit=1E-4,atrous_do='True',ini_method='curvature')#,psf_vary_do='True',psf_stype_only='False',psf_snrcut=5,psf_snrcutstack=5,psf_snrtop=0.3) 
 						
+						
+						#Skymodel
 						#write bbs catalog
 						img.write_catalog(outfile="""%sSkymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
 
-						#write ds9 catalog
+						#write bbs catalog
 						img.write_catalog(outfile="""%sSkymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
 
 
+						#catalog
+						#write ds9 catalog
+						img.write_catalog(outfile="""%sCatalog_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='ds9',correct_proj='True',clobber='True')
+
 						#write fits catalog
-						img.write_catalog(outfile="""%sSkymodel_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='fits',correct_proj='True',clobber='True')
+						img.write_catalog(outfile="""%sCatalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
+
+						#write bbs catalog
+						img.write_catalog(outfile="""%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
+
 
 
 						# Store the path of the Skymodel and value to exploit
 						# Skymodel path
-						self.statisticsSkymodelCurrent 		= """%sSkymodel_Iter%s"""%(self.SkymodelPath,self.i+1)
+						self.statisticsSkymodelCurrent 		= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1)
 						if self.i !=0:
-							self.statisticsSkymodelPrevious	= """%sSkymodel_Iter%s"""%(self.SkymodelPath,self.i)					
+							self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)					
 						# Values
 						self.rmsclipped						= img.clipped_rms
 						self.Mean							= img.clipped_mean
@@ -799,21 +836,31 @@ class selfCalRun:
 						#extract the source model with pybdsm
 						img	=  bdsm.process_image("""%sFinal_Image_%sarcsec_Iter%s.restored.corr"""%(self.ImagePathDir,self.pixsize[self.i-1],self.i),adaptive_rms_box='True',advanced_opts='True',detection_image="""%sFinal_Image_%sarcsec_Iter%s.restored"""%(self.ImagePathDir,self.pixsize[self.i-1],self.i),thresh_isl='%s'%(self.thresh_isl),thresh_pix='%s'%(self.thresh_pix),rms_box=(self.RMS_BOX[0],self.RMS_BOX[1]),rms_box_bright=(self.RMS_BOX_Bright[0],self.RMS_BOX_Bright[1]),adaptive_thresh=30,blank_limit=1E-4,atrous_do='True',ini_method='curvature')#,psf_vary_do='True',psf_stype_only='False',psf_snrcut=5,psf_snrcutstack=5,psf_snrtop=0.3) 
 						
+						
+						#Skymodel
 						#write bbs catalog
 						img.write_catalog(outfile="""%sFinal_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='bbs',correct_proj='True',clobber='True')
 
-						#write ds9 catalog
+						#write bbs catalog
 						img.write_catalog(outfile="""%sFinal_Skymodel_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='ds9',correct_proj='True',clobber='True')
-
+						
+												
+						#Catalog
+						#write ds9 catalog
+						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s.reg"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='ds9',correct_proj='True',clobber='True')
 
 						#write fits catalog
-						img.write_catalog(outfile="""%sFinal_Skymodel_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='gaul',format='fits',correct_proj='True',clobber='True')
+						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
+						
+						#write bbs catalog
+						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')						
+
 
 
 						# Store the path of the Skymodel and value to exploit
 						# Skymodel path
-						self.statisticsSkymodelCurrent 	= """%sFinal_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1)
-						self.statisticsSkymodelPrevious	= """%sSkymodel_Iter%s"""%(self.SkymodelPath,self.i)
+						self.statisticsSkymodelCurrent 	= """%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1)
+						self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)
 						# Values
 						self.rmsclipped						= img.clipped_rms
 						self.Mean							= img.clipped_mean
