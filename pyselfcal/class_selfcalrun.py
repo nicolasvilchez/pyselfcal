@@ -630,7 +630,7 @@ class selfCalRun:
 							img.write_catalog(outfile="""%sTemporary_Catalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
 
 							#write bbs catalog
-							img.write_catalog(outfile="""%sTemporary_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
+							#img.write_catalog(outfile="""%sTemporary_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
 							
 
 							# Extract the mask in fits format
@@ -665,7 +665,7 @@ class selfCalRun:
 							img.write_catalog(outfile="""%sTemporary_Final_Catalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
 
 							#write ds9 catalog
-							img.write_catalog(outfile="""%sTemporary_Final_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='ds9',correct_proj='True',clobber='True')
+							#img.write_catalog(outfile="""%sTemporary_Final_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
 														
 														
 							# Extract the mask in fits format
@@ -703,15 +703,24 @@ class selfCalRun:
 						img.write_catalog(outfile="""%sCatalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
 						
 						#write fits catalog
-						img.write_catalog(outfile="""%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
+						#img.write_catalog(outfile="""%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
 												
 						
 						
 						# Store the path of the Skymodel and value to exploit
+						#Catalog path
+						#self.statisticsSkymodelCurrent 		= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1)
+						#if self.i !=0:
+						#	self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)					
+						
+						
+						# Store the path of the Skymodel and value to exploit
 						#Skymodel path
-						self.statisticsSkymodelCurrent 		= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1)
+						self.statisticsSkymodelCurrent 		= """%sPybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1)
 						if self.i !=0:
-							self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)					
+							self.statisticsSkymodelPrevious	= """%sPybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i)							
+						
+						
 						# Values
 						self.rmsclipped						= img.clipped_rms
 						self.Mean							= img.clipped_mean
@@ -756,14 +765,20 @@ class selfCalRun:
 						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
 
 						#write BBS catalog
-						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
+						#img.write_catalog(outfile="""%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
 
 
 
 						# Store the path of the Skymodel and value to exploit
+						# Catalog path
+						#self.statisticsSkymodelCurrent 	= """%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1)
+						#self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)
+
+						# Store the path of the Skymodel and value to exploit
 						# Skymodel path
-						self.statisticsSkymodelCurrent 	= """%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1)
-						self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)
+						self.statisticsSkymodelCurrent 	= """%sFinal_Pybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1)
+						self.statisticsSkymodelPrevious	= """%sPybdsm_Skymodel_Iter%s"""%(self.SkymodelPath,self.i)						
+						
 						# Values
 						self.rmsclipped						= img.clipped_rms
 						self.Mean							= img.clipped_mean
@@ -810,15 +825,22 @@ class selfCalRun:
 						img.write_catalog(outfile="""%sCatalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
 
 						#write bbs catalog
-						img.write_catalog(outfile="""%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
+						#img.write_catalog(outfile="""%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')
 
 
 
 						# Store the path of the Skymodel and value to exploit
+						# Catalog path
+						#self.statisticsSkymodelCurrent 		= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1)
+						#if self.i !=0:
+						#	self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)		
+							
+						# Store the path of the Skymodel and value to exploit
 						# Skymodel path
-						self.statisticsSkymodelCurrent 		= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i+1)
+						self.statisticsSkymodelCurrent 		= """%sSkymodel_Iter%s"""%(self.SkymodelPath,self.i+1)
 						if self.i !=0:
-							self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)					
+							self.statisticsSkymodelPrevious	= """%sSkymodel_Iter%s"""%(self.SkymodelPath,self.i)									
+										
 						# Values
 						self.rmsclipped						= img.clipped_rms
 						self.Mean							= img.clipped_mean
@@ -853,14 +875,20 @@ class selfCalRun:
 						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s.fits"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='fits',correct_proj='True',clobber='True')
 						
 						#write bbs catalog
-						img.write_catalog(outfile="""%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')						
+						#img.write_catalog(outfile="""%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1),catalog_type='srl',format='bbs',correct_proj='True',clobber='True')						
 
 
 
 						# Store the path of the Skymodel and value to exploit
 						# Skymodel path
-						self.statisticsSkymodelCurrent 	= """%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1)
-						self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)
+						#self.statisticsSkymodelCurrent 	= """%sFinal_Catalog_Iter%s"""%(self.SkymodelPath,self.i+1)
+						#self.statisticsSkymodelPrevious	= """%sCatalog_Iter%s"""%(self.SkymodelPath,self.i)
+
+						# Store the path of the Skymodel and value to exploit
+						# Skymodel path
+						self.statisticsSkymodelCurrent 	= """%sFinal_Skymodel_Iter%s"""%(self.SkymodelPath,self.i+1)
+						self.statisticsSkymodelPrevious	= """%sSkymodel_Iter%s"""%(self.SkymodelPath,self.i)
+
 						# Values
 						self.rmsclipped						= img.clipped_rms
 						self.Mean							= img.clipped_mean
