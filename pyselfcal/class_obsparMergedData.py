@@ -64,6 +64,9 @@ class observationMergedDataParam:
 				i = i+1			
 	
 		
+		################################################################
+		# Compare values from File[i] with File[i+1]
+		################################################################		
 		
 					
 		# check about the number of channels of the data

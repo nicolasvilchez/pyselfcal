@@ -100,12 +100,12 @@ def main(initparameterlist):
 
 	try:
 
-	      opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "obsDir=", "outputDir=", "skyModel=", "nbCycle=", "outerfovclean=", "VLSSuse=", "annulusRadius=", "startResolution=", "endResolution=", "resolutionVector=", "mask=", "UVmin=", "startingFactor=", "FOV=", "nofPixelPerBeam=", "robust=", "maskDilation=", "peeling=", "skymodel2Peel="])
+	      opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "obsDir=", "outputDir=", "skyModel=", "nbCycle=", "outerfovclean=", "VLSSuse=", "annulusRadius=", "startResolution=", "endResolution=", "resolutionVector=", "mask=", "UVmin=", "startingFactor=", "FOV=", "nofPixelPerBeam=", "robust=", "maskDilation=", "peeling=", "skymodel2Peel=", "propagateSolution="])
 
       
 	except getopt.GetoptError as err:
 	      print ""		
-	      print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel=]"
+	      print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel= --propagateSolution=]"
 	      print ""
 	      print "For more details: type selfcal.py -h"
 	      print ""
@@ -126,7 +126,7 @@ def main(initparameterlist):
 						print ""
 						print "Usage: selfcal.py PATH/parsetFile"
 						print 'OR'
-						print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel=]\n"
+						print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel= --propagateSolution=]\n"
 						
 						print """
 ******************************************************************************
@@ -190,6 +190,8 @@ For more details see pybdsm export_image documentation.
 *  --nofPixelPerBeam(float, default:4): Number of pixels per beam.
 
 *  --robust(float, default:none): If robust parameter is set, it will be kept constant for all cycles. If unset, the robust parameter varies iteratively from 1 to -2. Must be in the interval: [2;-2] 
+
+*  --propagateSolution(string, default:no): By default the same DATA column is used to calibrate the phase at each cycle with selfcal. If propagateSolution is set to yes, the CORRECTED_DATA column of the previous cycle will be used as an input for the calibration. 
 
 *  --peeling(string, default:no): If peeling=yes, the brightest source in the initial catalog will be peeled (or brightest sources)
  *** NB:  peeling and DDC options are in conflict. no use both at the same time"
@@ -265,6 +267,8 @@ nofPixelPerBeam  =  3
 					initparameterlist[17]=strcompress(par2)	
 				elif par1 in ("--skymodel2Peel"):
 					initparameterlist[18]=strcompress(par2)																																																												
+				elif par1 in ("--propagateSolution"):
+					initparameterlist[19]=strcompress(par2)	
 				else:
 						print("Option {} Unknown".format(par1))
 						sys.exit(2)
@@ -278,7 +282,7 @@ nofPixelPerBeam  =  3
 				print ""
 				print "Usage: selfcal.py PATH/parsetFile"
 				print 'OR'
-				print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel=]\n"
+				print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel= --propagateSolution=]\n"
 				print ""
 				sys.exit(2)       	
  
@@ -329,7 +333,7 @@ nofPixelPerBeam  =  3
 								print ""
 								print "Usage: selfcal.py PATH/parsetFile"
 								print 'OR'
-								print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel=]\n"							
+								print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel= --propagateSolution=]\n"							
 								
 								print """
 ******************************************************************************
@@ -393,6 +397,8 @@ For more details see pybdsm export_image documentation.
 *  --nofPixelPerBeam(float, default:4): Number of pixels per beam.
 
 *  --robust(float, default:none): If robust parameter is set, it will be kept constant for all cycles. If unset, the robust parameter varies iteratively from 1 to -2. Must be in the interval: [2;-2] 
+
+*  --propagateSolution(string, default:no): By default the same DATA column is used to calibrate the phase at each cycle with selfcal. If propagateSolution is set to yes, the CORRECTED_DATA column of the previous cycle will be used as an input for the calibration. 
 
 *  --peeling(string, default:no): If peeling=yes, the brightest source in the initial catalog will be peeled (or brightest sources)
  *** NB:  peeling and DDC options are in conflict. no use both at the same time"
@@ -468,6 +474,8 @@ nofPixelPerBeam  =  3
 							initparameterlist[17]=strcompress(par2)
 						elif strcompress(par1)	 in ("skymodel2Peel"):
 							initparameterlist[18]=strcompress(par2)																																					
+						elif strcompress(par1)	 in ("propagateSolution"):
+							initparameterlist[19]=strcompress(par2)	
 						else:
 								print("Option {} Unknown".format(par1))
 								sys.exit(2)
@@ -480,7 +488,7 @@ nofPixelPerBeam  =  3
 					print ""
 					print "Usage: selfcal.py PATH/parsetFile"
 					print 'OR'
-					print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel=]\n"				
+					print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation= --peeling= --skymodel2Peel= --propagateSolution=]\n"				
 					print ""
 					sys.exit(2)       	
 						
@@ -493,7 +501,7 @@ nofPixelPerBeam  =  3
 						print ""
 						print "Usage: selfcal.py PATH/parsetFile"
 						print 'OR'
-						print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation=  --peeling= --skymodel2Peel=]\n"
+						print "Usage: selfcal.py --obsDir= --outputDir= [Options: --skyModel= --nbCycle= --outerfovclean= --VLSSuse= --annulusRadius= --startResolution= --endResolution= --resolutionVector= --mask= --UVmin= --startingFactor= --FOV= --nofPixelPerBeam= --robust= --maskDilation=  --peeling= --skymodel2Peel= --propagateSolution=]\n"
 						
 						print """
 ******************************************************************************
@@ -557,6 +565,8 @@ For more details see pybdsm export_image documentation.
 *  --nofPixelPerBeam(float, default:4): Number of pixels per beam.
 
 *  --robust(float, default:none): If robust parameter is set, it will be kept constant for all cycles. If unset, the robust parameter varies iteratively from 1 to -2. Must be in the interval: [2;-2] 
+
+*  --propagateSolution(string, default:no): By default the same DATA column is used to calibrate the phase at each cycle with selfcal. If propagateSolution is set to yes, the CORRECTED_DATA column of the previous cycle will be used as an input for the calibration. 
 
 
 *  --peeling(string, default:no): If peeling=yes, the brightest source in the initial catalog will be peeled (or brightest sources)
@@ -628,7 +638,7 @@ if __name__=='__main__':
 	####################################################################
 
 	
-    initparameterlist=range(19)
+    initparameterlist=range(20)
     
     initparameterlist[0]	= "none"	# Observation Directory
     initparameterlist[1]	= "none"	# Output Directory
@@ -649,6 +659,7 @@ if __name__=='__main__':
     initparameterlist[16]	= "none"	# mask Dilatation param  
     initparameterlist[17]	= "none"	# peeling       
     initparameterlist[18]	= "none"	# skymodel2Peel
+    initparameterlist[19]	= "none"	# propagateSolution
         
     # Read and check parameters	
     initparameterlist = main(initparameterlist)
@@ -667,16 +678,17 @@ if __name__=='__main__':
     if resolutionVector != ['none']:
 		resolutionVector= resolutionVector.split(',')		
    
-    mask			= initparameterlist[9]
-    UVmin			= initparameterlist[10]
-    startingFactor	= initparameterlist[11]
-    FOV				= initparameterlist[12]
-    skyModel		= initparameterlist[13]
-    nofPixelPerBeam	= initparameterlist[14]
-    robust			= initparameterlist[15]
-    maskDilation	= initparameterlist[16]
-    peeling			= initparameterlist[17]
-    skymodel2Peel	= initparameterlist[18]
+    mask			 = initparameterlist[9]
+    UVmin			 = initparameterlist[10]
+    startingFactor	 = initparameterlist[11]
+    FOV				 = initparameterlist[12]
+    skyModel		 = initparameterlist[13]
+    nofPixelPerBeam	 = initparameterlist[14]
+    robust			 = initparameterlist[15]
+    maskDilation	 = initparameterlist[16]
+    peeling			 = initparameterlist[17]
+    skymodel2Peel	 = initparameterlist[18]
+    propagateSolution= initparameterlist[19]
 
     
 	####################################################################
@@ -855,6 +867,9 @@ if __name__=='__main__':
     if peeling == 'none':
 		peeling='no'
 		
+    if propagateSolution == 'none':
+		propagateSolution ='no'		
+		
 
 	####################################################################
 	# 4) Check parameters values (check contradiction between parameters)
@@ -902,6 +917,12 @@ if __name__=='__main__':
  		print ""
 		sys.exit(2) 
 		
+
+    if propagateSolution != 'yes' and propagateSolution != 'no' and   propagateSolution!= 'none': 
+		print ''
+		print 'propagateSolution parameter must be equal to yes or no or not provided !' 
+ 		print ""
+		sys.exit(2) 
 				
 	####################################################################
 	# 5) Check parameters format
@@ -1026,6 +1047,15 @@ if __name__=='__main__':
 	      print "skymodel2Peel parameter must be a string or not provided !"
 	      print ""
 	      sys.exit(2)
+	      
+    try:
+	      propagateSolution = str(propagateSolution)     
+    except:
+	      print ""
+	      print "propagateSolution parameter must be a string or not provided !"
+	      print ""
+	      sys.exit(2)	      
+	      
 
 
 	      	      
@@ -1245,7 +1275,9 @@ if __name__=='__main__':
     print 'peeling = %s'%(peeling)    
     print ''
     print 'skymodel2Peel = %s'%(skymodel2Peel)    
-    print ''                
+    print ''
+    print 'propagateSolution = %s'%(propagateSolution)
+    print ''        
     print '############################################################'
 	
 
@@ -1507,7 +1539,7 @@ if __name__=='__main__':
 			 
 			
 			# Selfcal Initialization
-			selfCalRun_Obj	= class_selfcalrun.selfCalRun(i,dataDir,outputDir,nbCycle,listFiles,Files,NbFiles,SkymodelPath,GSMSkymodel,ImagePathDir,UVmin,UVmax,wmax,pixsize,nbpixel,robust,nIteration,RMS_BOX,RMS_BOX_Bright,thresh_isl,thresh_pix,outerfovclean,VLSSuse,preprocessIndex,mask,maskDilation,ra_target,dec_target,FOV)
+			selfCalRun_Obj	= class_selfcalrun.selfCalRun(i,dataDir,outputDir,nbCycle,listFiles,Files,NbFiles,SkymodelPath,GSMSkymodel,ImagePathDir,UVmin,UVmax,wmax,pixsize,nbpixel,robust,nIteration,RMS_BOX,RMS_BOX_Bright,thresh_isl,thresh_pix,outerfovclean,VLSSuse,preprocessIndex,mask,maskDilation,ra_target,dec_target,FOV,propagateSolution)
 			
 			
 			# Run the BBS-cal on each Time chunks
@@ -1638,7 +1670,7 @@ if __name__=='__main__':
       
     # Iniatialization (Object creation)
     i=nbCycle	
-    selfCalRun_Obj	= class_selfcalrun.selfCalRun(i,dataDir,outputDir,nbCycle,listFiles,Files,NbFiles,SkymodelPath,GSMSkymodel,ImagePathDir,UVmin,UVmax,wmax,pixsize,nbpixel,robust,nIteration,RMS_BOX,RMS_BOX_Bright,thresh_isl,thresh_pix,outerfovclean,VLSSuse,preprocessIndex,mask,maskDilation,ra_target,dec_target,FOV)
+    selfCalRun_Obj	= class_selfcalrun.selfCalRun(i,dataDir,outputDir,nbCycle,listFiles,Files,NbFiles,SkymodelPath,GSMSkymodel,ImagePathDir,UVmin,UVmax,wmax,pixsize,nbpixel,robust,nIteration,RMS_BOX,RMS_BOX_Bright,thresh_isl,thresh_pix,outerfovclean,VLSSuse,preprocessIndex,mask,maskDilation,ra_target,dec_target,FOV,propagateSolution)
 	
     
     # Run the BBS-cal on each Time chunks

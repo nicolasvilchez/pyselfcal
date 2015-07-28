@@ -61,7 +61,7 @@ class selfCalRun:
 	# Preparation of the Iteration run
 	####################################################################
 
-    def __init__(self,i,dataDir,outputDir,nbCycle,listFiles,Files,NbFiles,SkymodelPath,GSMSkymodel,ImagePathDir,UVmin,UVmax,wmax,pixsize,nbpixel,robust,nIteration,RMS_BOX,RMS_BOX_Bright,thresh_isl,thresh_pix,outerfovclean,VLSSuse,preprocessIndex,mask,maskDilation,ra_target,dec_target,FOV):
+    def __init__(self,i,dataDir,outputDir,nbCycle,listFiles,Files,NbFiles,SkymodelPath,GSMSkymodel,ImagePathDir,UVmin,UVmax,wmax,pixsize,nbpixel,robust,nIteration,RMS_BOX,RMS_BOX_Bright,thresh_isl,thresh_pix,outerfovclean,VLSSuse,preprocessIndex,mask,maskDilation,ra_target,dec_target,FOV,propagateSolution):
     
 	self.i				= i
 	self.j				= 0
@@ -96,6 +96,8 @@ class selfCalRun:
 	self.dec_target		= dec_target
 	self.FOV			= FOV
 	
+	self.propagateSolution	= propagateSolution
+	
 	self.statisticsSkymodelCurrent 	= ''
 	self.statisticsSkymodelPrevious = ''	
 	self.rmsclipped					= 0
@@ -104,102 +106,223 @@ class selfCalRun:
 	
 	####################################################################
 	## Directory creation and Data copy for the selfCal loop
+	##
+	## propagateSolution = NO i.e use always same data input 
+	##
 	####################################################################
+
+	if self.propagateSolution == 'no':
 	
-	if self.i < self.nbCycle:
-		
-			# Create The Iteration Directory
-			self.IterDir		= self.outputDir+"""Iter%s/"""%(self.i)
-			if os.path.isdir(self.IterDir) != True:
-				cmd="""mkdir %s"""%(self.IterDir)
-				os.system(cmd)									
-
-			
-			# copy original data
-			if self.outerfovclean =='no':
-					
-					print ''
-					cmd=""" cp -r %s* %s"""%(self.dataDir,self.IterDir)
-					print cmd
-					print ''
-					os.system(cmd)	
+			if self.i < self.nbCycle:
 				
+					# Create The Iteration Directory
+					self.IterDir		= self.outputDir+"""Iter%s/"""%(self.i)
+					if os.path.isdir(self.IterDir) != True:
+						cmd="""mkdir %s"""%(self.IterDir)
+						os.system(cmd)									
+
+					# Create NDPPP Iteration Directory
+					self.NDPPPDir	= self.outputDir+"""NDPPP_Iter%s/"""%(self.i)
+					if os.path.isdir(self.NDPPPDir) != True:
+							cmd="""mkdir %s"""%(self.NDPPPDir)
+							os.system(cmd)
+
+
+					# Create Statistics Iteration Directory
+					self.statDir	= self.outputDir+"""Stats_Iter%s/"""%(self.i)
+					if os.path.isdir(self.statDir) != True:
+							cmd="""mkdir %s"""%(self.statDir)
+							os.system(cmd)
+
+					
+					####################################################
+					# DATA Copy 
+					####################################################					
+					
+					# copy original data
+					if self.outerfovclean =='no':
 							
+							print ''
+							cmd=""" cp -r %s* %s"""%(self.dataDir,self.IterDir)
+							print cmd
+							print ''
+							os.system(cmd)	
+																			
 											
-									
-			# copy data from PreProcessing directory		
-			if self.outerfovclean =='yes':
+					# copy data from PreProcessing directory		
+					if self.outerfovclean =='yes':
 
-					print ''							
-					cmd=""" cp -r %s %s"""%("""%sPreprocessDir/Iter%s/*sub%s"""%(self.outputDir,self.preprocessIndex,self.preprocessIndex),self.IterDir)
-					print cmd
-					print ''
-					os.system(cmd)							
-									
+							print ''							
+							cmd=""" cp -r %s %s"""%("""%sPreprocessDir/Iter%s/*sub%s"""%(self.outputDir,self.preprocessIndex,self.preprocessIndex),self.IterDir)
+							print cmd
+							print ''
+							os.system(cmd)							
+											
+
+			####################################################################
+			#Directory creation and Data copy for Final Cycle
+
+			if self.i == self.nbCycle:
+				
+					# Create The Iteration Directory
+					self.IterDir		= self.outputDir+"""Final_Iter/"""
+					if os.path.isdir(self.IterDir) != True:
+						cmd="""mkdir %s"""%(self.IterDir)
+						os.system(cmd)									
+
+					# Create NDPPP Iteration Directory
+					self.NDPPPDir	= self.outputDir+"""NDPPP_Final_Iter%s/"""%(self.i)
+					if os.path.isdir(self.NDPPPDir) != True:
+							cmd="""mkdir %s"""%(self.NDPPPDir)
+							os.system(cmd)
 
 
-			# Create NDPPP Iteration Directory
-			self.NDPPPDir	= self.outputDir+"""NDPPP_Iter%s/"""%(self.i)
-			if os.path.isdir(self.NDPPPDir) != True:
-					cmd="""mkdir %s"""%(self.NDPPPDir)
-					os.system(cmd)
+					# Create Statistics Iteration Directory
+					self.statDir	= self.outputDir+"""Stats_Final_Iter%s/"""%(self.i)
+					if os.path.isdir(self.statDir) != True:
+							cmd="""mkdir %s"""%(self.statDir)
+							os.system(cmd)
 
+					
+					####################################################
+					# DATA Copy 
+					####################################################					
+					
+					# copy original data
+					if self.outerfovclean =='no':
+							
+							print ''
+							cmd=""" cp -r %s* %s"""%(self.dataDir,self.IterDir)
+							print cmd
+							print ''
+							os.system(cmd)	
+																			
+											
+					# copy data from PreProcessing directory		
+					if self.outerfovclean =='yes':
 
-			# Create Statistics Iteration Directory
-			self.statDir	= self.outputDir+"""Stats_Iter%s/"""%(self.i)
-			if os.path.isdir(self.statDir) != True:
-					cmd="""mkdir %s"""%(self.statDir)
-					os.system(cmd)
+							print ''							
+							cmd=""" cp -r %s %s"""%("""%sPreprocessDir/Iter%s/*sub%s"""%(self.outputDir,self.preprocessIndex,self.preprocessIndex),self.IterDir)
+							print cmd
+							print ''
+							os.system(cmd)							
 
 
 	####################################################################
-	## Directory creation and Data copy Final Image
+	## Directory creation and Data copy for the selfCal loop
+	##
+	## propagateSolution = YES i.e use output CORRECTED_DATA as DATA input 
+	##
 	####################################################################
-	if self.i == self.nbCycle:
-		
-			# Create The Iteration Directory
-			self.IterDir		= self.outputDir+"""Final_Iter/"""
-			if os.path.isdir(self.IterDir) != True:
-				cmd="""mkdir %s"""%(self.IterDir)
-				os.system(cmd)	
+
+	if self.propagateSolution == 'yes':
+	
+			if self.i < self.nbCycle:
+				
+					# Create The Iteration Directory
+					self.IterDir		= self.outputDir+"""Iter%s/"""%(self.i)
+					if os.path.isdir(self.IterDir) != True:
+						cmd="""mkdir %s"""%(self.IterDir)
+						os.system(cmd)									
+
+					# Create NDPPP Iteration Directory
+					self.NDPPPDir	= self.outputDir+"""NDPPP_Iter%s/"""%(self.i)
+					if os.path.isdir(self.NDPPPDir) != True:
+							cmd="""mkdir %s"""%(self.NDPPPDir)
+							os.system(cmd)
+
+
+					# Create Statistics Iteration Directory
+					self.statDir	= self.outputDir+"""Stats_Iter%s/"""%(self.i)
+					if os.path.isdir(self.statDir) != True:
+							cmd="""mkdir %s"""%(self.statDir)
+							os.system(cmd)
+
+					
+					####################################################
+					# DATA Copy 
+					####################################################					
+					
+					if self.i  == 0:
 							
-			
-			# copy original data
-			if self.outerfovclean =='no':
-					
-					print ''
-					cmd=""" cp -r %s* %s"""%(self.dataDir,self.IterDir)
-					print cmd
-					print ''
-					os.system(cmd)	
+							# copy original data
+							if self.outerfovclean =='no':
 									
-					
+									print ''
+									cmd=""" cp -r %s* %s"""%(self.dataDir,self.IterDir)
+									print cmd
+									print ''
+									os.system(cmd)	
+																					
+													
+							# copy data from PreProcessing directory		
+							if self.outerfovclean =='yes':
+
+									print ''							
+									cmd=""" cp -r %s %s"""%("""%sPreprocessDir/Iter%s/*sub%s"""%(self.outputDir,self.preprocessIndex,self.preprocessIndex),self.IterDir)
+									print cmd
+									print ''
+									os.system(cmd)	
+									
+									
+					if self.i  > 0:											
+
+							# copy previous iteration data									
+							print '#############################'
+							print ''
+							for k in range(NbFiles):
+									cmd=""" cp -r %sIter%s/%s  %s"""%(self.outputDir,self.i-1,Files[k],self.IterDir)
+									print cmd
+									print
+									os.system(cmd)
+							print ''		
+							print '#############################'
+														
+																					
+													
+
 											
-									
-			# copy data from PreProcessing directory		
-			if self.outerfovclean =='yes':
 
-					print ''							
-					cmd=""" cp -r %s %s"""%("""%sPreprocessDir/Iter%s/*sub%s"""%(self.outputDir,self.preprocessIndex,self.preprocessIndex),self.IterDir)
-					print cmd
+			####################################################################
+			#Directory creation and Data copy for Final Cycle
+
+			if self.i == self.nbCycle:
+				
+					# Create The Iteration Directory
+					self.IterDir		= self.outputDir+"""Final_Iter/"""
+					if os.path.isdir(self.IterDir) != True:
+						cmd="""mkdir %s"""%(self.IterDir)
+						os.system(cmd)									
+
+					# Create NDPPP Iteration Directory
+					self.NDPPPDir	= self.outputDir+"""NDPPP_Final_Iter%s/"""%(self.i)
+					if os.path.isdir(self.NDPPPDir) != True:
+							cmd="""mkdir %s"""%(self.NDPPPDir)
+							os.system(cmd)
+
+
+					# Create Statistics Iteration Directory
+					self.statDir	= self.outputDir+"""Stats_Final_Iter%s/"""%(self.i)
+					if os.path.isdir(self.statDir) != True:
+							cmd="""mkdir %s"""%(self.statDir)
+							os.system(cmd)
+
+					
+					####################################################
+					# DATA Copy 
+					####################################################					
+					
+					# copy previous iteration data									
+					print '#############################'
 					print ''
-					os.system(cmd)				
-			
-
-
-
-			# Create NDPPP Iteration Directory
-			self.NDPPPDir	= self.outputDir+"""NDPPP_Final_Iter%s/"""%(self.i)
-			if os.path.isdir(self.NDPPPDir) != True:
-					cmd="""mkdir %s"""%(self.NDPPPDir)
-					os.system(cmd)
-
-
-			# Create Statistics Iteration Directory
-			self.statDir	= self.outputDir+"""Stats_Final_Iter%s/"""%(self.i)
-			if os.path.isdir(self.statDir) != True:
-					cmd="""mkdir %s"""%(self.statDir)
-					os.system(cmd)
+					for k in range(NbFiles):
+							cmd=""" cp -r %sIter%s/%s  %s"""%(self.outputDir,self.i-1,Files[k],self.IterDir)
+							print cmd
+							print
+							os.system(cmd)
+					print ''		
+					print '#############################'
+							
 
 
 	####################################################################
@@ -273,7 +396,7 @@ class selfCalRun:
 
 
 	####################################################################
-	# Parrallelization (BBS & NDPPP) function
+	# Parrallelization (Gaincal & flag with NDPPP) function
 	####################################################################
 	
     def process(self,index_process,files_process,skymodel_process,param1_process,param2_process,param3_process):
@@ -312,6 +435,8 @@ class selfCalRun:
 				cmd1	= """msin=%s%s\n"""%(self.IterDir,files_process)
 				cmd7	= """gaincal.sourcedb=%s%s/sky\n"""%(self.IterDir,files_process)
 				cmd10	= """gaincal.parmdb=%s%s/instrument\n"""%(self.IterDir,files_process)
+
+
 						
 		cmd2	= """msin.datacolumn=DATA\n"""
 		cmd3	= """msout=.\n"""
@@ -426,6 +551,16 @@ class selfCalRun:
 		print cmd_NDPPP1
 		print ''
 		os.system(cmd_NDPPP1)		
+
+
+		################################################################
+		# Copy the CORRECTED_DATA column in the DATA Column is 
+		# propagateSolution = yes => propagate the Solution
+		################################################################
+
+		if self.propagateSolution == 'yes':
+			self.copy_data_invert("""%s%s"""%(self.IterDir,files_process))	
+			
 
 
 
@@ -1028,20 +1163,11 @@ Informations extracted with pybdsm
 	####################################################################	
 	# Additionnal Internal function
 	####################################################################	
-		
-	
-    def copy_data(self,inms):
-		
-			# Create corrected data colun and Put data to corrected data column 
-			t = pt.table(inms, readonly=False, ack=True)
-			data = t.getcol('DATA')
-			pt.addImagingColumns(inms, ack=True)
-			t.putcol('CORRECTED_DATA', data)
-			t.close()		
+			
 		
     def copy_data_invert(self,inms):
 		
-			## Create corrected data colun and Put data to corrected data column 
+			## Copy corrected data colun and Put in the data column 
 			t = pt.table(inms, readonly=False, ack=True)
 			data = t.getcol('CORRECTED_DATA')
 			pt.addImagingColumns(inms, ack=True)
