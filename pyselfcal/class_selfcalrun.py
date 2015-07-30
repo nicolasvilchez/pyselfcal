@@ -253,6 +253,22 @@ class selfCalRun:
 									print cmd
 									print ''
 									os.system(cmd)	
+									
+									# Do a copy of the original data
+									print '#############################'
+									print ''
+									for k in range(self.NbFiles):
+											file_Table	="""%s%s"""%(self.IterDir,self.Files[k])
+											t 			= pt.table(file_Table, readonly=False, ack=True)																							
+											col_desc	= pt.makecoldesc("ORIGINAL_DATA_BACKUP",t.getcoldesc('DATA'))
+											backup_desc = pt.maketabdesc(col_desc)	
+											t.addcols(backup_desc)																						
+											data 		= t.getcol('DATA')											
+											t.putcol('ORIGINAL_DATA_BACKUP', data)											
+											t.close()
+									print ''		
+									print '#############################'									
+								
 																					
 													
 							# copy data from PreProcessing directory		
@@ -264,22 +280,55 @@ class selfCalRun:
 									print ''
 									os.system(cmd)	
 									
+									# Do a copy of the original data
+									print '#############################'
+									print ''
+									for k in range(self.NbFiles):
+											file_Table="""%sPreprocessDir/Iter%s/%s_sub%s"""%(self.outputDir,self.preprocessIndex,self.Files[k],self.preprocessIndex)
+											t 			= pt.table(file_Table, readonly=False, ack=True)																							
+											col_desc	= pt.makecoldesc("ORIGINAL_DATA_BACKUP",t.getcoldesc('DATA'))
+											backup_desc = pt.maketabdesc(col_desc)	
+											t.addcols(backup_desc)																						
+											data 		= t.getcol('DATA')											
+											t.putcol('ORIGINAL_DATA_BACKUP', data)											
+											t.close()
+									print ''		
+									print '#############################'
+									
+									
 									
 					if self.i  > 0:											
 
 							# copy previous iteration data									
 							print '#############################'
 							print ''
-							for k in range(NbFiles):
-									cmd=""" cp -r %sIter%s/%s  %s"""%(self.outputDir,self.i-1,Files[k],self.IterDir)
-									print cmd
-									print
-									os.system(cmd)
+							cmd=""" cp -r %sIter%s/*  %s"""%(self.outputDir,self.i-1,self.IterDir)
+							print cmd
+							os.system(cmd)
+
+							################################################################
+							# Copy the CORRECTED_DATA column in the DATA Column is 
+							# propagateSolution = yes => propagate the Solution
+							################################################################	
+
+							# From data
+							if self.outerfovclean =='no':
+						
+									for k in range(self.NbFiles):
+											self.copy_data_invert("""%s%s"""%(self.IterDir,self.Files[k]))
+							
 							print ''		
 							print '#############################'
-														
-																					
-													
+
+
+							# From PreProcessing directory		
+							if self.outerfovclean =='yes':																																		
+
+									for k in range(self.NbFiles):
+											self.copy_data_invert("""%s%s_sub%s"""%(self.IterDir,self.Files[k],self.preprocessIndex))
+							
+							print ''		
+							print '#############################'													
 
 											
 
@@ -311,18 +360,43 @@ class selfCalRun:
 					####################################################
 					# DATA Copy 
 					####################################################					
-					
+
 					# copy previous iteration data									
 					print '#############################'
 					print ''
-					for k in range(NbFiles):
-							cmd=""" cp -r %sIter%s/%s  %s"""%(self.outputDir,self.i-1,Files[k],self.IterDir)
-							print cmd
-							print
-							os.system(cmd)
+					cmd=""" cp -r %sIter%s/*  %s"""%(self.outputDir,self.i-1,self.IterDir)
+					print cmd
+					os.system(cmd)
+					
+							
+					################################################################
+					# Copy the CORRECTED_DATA column in the DATA Column is 
+					# propagateSolution = yes => propagate the Solution
+					################################################################	
+
+					# From data
+					if self.outerfovclean =='no':
+						
+							for k in range(self.NbFiles):
+									self.copy_data_invert("""%s%s"""%(self.IterDir,self.Files[k]))
+							
 					print ''		
 					print '#############################'
+
+
+					# From PreProcessing directory		
+					if self.outerfovclean =='yes':																																		
+
+							for k in range(self.NbFiles):
+									self.copy_data_invert("""%s%s_sub%s"""%(self.IterDir,self.Files[k],self.preprocessIndex))
 							
+					print ''		
+					print '#############################'	
+
+
+
+
+
 
 
 	####################################################################
@@ -445,6 +519,7 @@ class selfCalRun:
 		cmd6	= """gaincal.caltype=phaseonly\n"""
 		cmd8	= """gaincal.usebeammodel=false\n"""
 		cmd9	= """gaincal.tolerance=1.e-5\n"""
+		cmd11	= """gaincal.maxiter=200\n"""
 				
 		fileGaincal1.write(cmd1)
 		fileGaincal1.write(cmd2)
@@ -456,6 +531,7 @@ class selfCalRun:
 		fileGaincal1.write(cmd8)
 		fileGaincal1.write(cmd9)
 		fileGaincal1.write(cmd10)
+		fileGaincal1.write(cmd11)
 		
 		fileGaincal1.close()
 
@@ -551,17 +627,6 @@ class selfCalRun:
 		print cmd_NDPPP1
 		print ''
 		os.system(cmd_NDPPP1)		
-
-
-		################################################################
-		# Copy the CORRECTED_DATA column in the DATA Column is 
-		# propagateSolution = yes => propagate the Solution
-		################################################################
-
-		if self.propagateSolution == 'yes':
-			self.copy_data_invert("""%s%s"""%(self.IterDir,files_process))	
-			
-
 
 
 		print ''
