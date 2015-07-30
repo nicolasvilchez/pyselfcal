@@ -216,7 +216,11 @@ class selfCalRun:
 	####################################################################
 
 	if self.propagateSolution == 'yes':
-	
+
+			############################################################								
+			#Directory creation and Data copy for Cycles before the final one
+			############################################################
+				
 			if self.i < self.nbCycle:
 				
 					# Create The Iteration Directory
@@ -240,9 +244,13 @@ class selfCalRun:
 
 					
 					####################################################
-					# DATA Copy 
-					####################################################					
-					
+					# DATA copy AND
+					#
+					# Copy the CORRECTED_DATA column in the DATA Column is 
+					# propagateSolution = yes => propagate the Solution
+					####################################################	
+										
+					# For first cycle Iter0
 					if self.i  == 0:
 							
 							# copy original data
@@ -253,8 +261,9 @@ class selfCalRun:
 									print cmd
 									print ''
 									os.system(cmd)	
-									
-									# Do a copy of the original data
+
+
+									# Do a backup of the original data
 									print '#############################'
 									print ''
 									for k in range(self.NbFiles):
@@ -280,7 +289,7 @@ class selfCalRun:
 									print ''
 									os.system(cmd)	
 									
-									# Do a copy of the original data
+									# Do a backup of the original data
 									print '#############################'
 									print ''
 									for k in range(self.NbFiles):
@@ -296,45 +305,37 @@ class selfCalRun:
 									print '#############################'
 									
 									
-									
-					if self.i  > 0:											
-
-							# copy previous iteration data									
+					# For first cycle Iterx (1->nof cycle)									
+					if self.i  > 0:	
+																						
+							# From data							
 							print '#############################'
 							print ''
-							cmd=""" cp -r %sIter%s/*  %s"""%(self.outputDir,self.i-1,self.IterDir)
-							print cmd
-							os.system(cmd)
-
-							################################################################
-							# Copy the CORRECTED_DATA column in the DATA Column is 
-							# propagateSolution = yes => propagate the Solution
-							################################################################	
-
-							# From data
-							if self.outerfovclean =='no':
-						
-									for k in range(self.NbFiles):
-											self.copy_data_invert("""%s%s"""%(self.IterDir,self.Files[k]))
-							
+							if self.outerfovclean =='no':					
+									for k in range(self.NbFiles):										
+											cmd=""" cp -r %sIter%s/%s  %s"""%(self.outputDir,self.i-1,self.Files[k],self.IterDir)
+											print cmd
+											os.system(cmd)																				
+											self.copy_data_invert("""%s%s"""%(self.IterDir,self.Files[k]))							
 							print ''		
 							print '#############################'
 
 
 							# From PreProcessing directory		
-							if self.outerfovclean =='yes':																																		
-
+							if self.outerfovclean =='yes':
 									for k in range(self.NbFiles):
-											self.copy_data_invert("""%s%s_sub%s"""%(self.IterDir,self.Files[k],self.preprocessIndex))
-							
+											cmd=""" cp -r %sIter%s/%s_sub%s  %s"""%(self.outputDir,self.i-1,self.Files[k],self.preprocessIndex,self.IterDir)
+											print cmd
+											os.system(cmd)											
+											self.copy_data_invert("""%s%s_sub%s"""%(self.IterDir,self.Files[k],self.preprocessIndex))						
 							print ''		
 							print '#############################'													
 
 											
-
-			####################################################################
+			############################################################								
 			#Directory creation and Data copy for Final Cycle
-
+			############################################################
+			
 			if self.i == self.nbCycle:
 				
 					# Create The Iteration Directory
@@ -355,41 +356,33 @@ class selfCalRun:
 					if os.path.isdir(self.statDir) != True:
 							cmd="""mkdir %s"""%(self.statDir)
 							os.system(cmd)
-
 					
+									
 					####################################################
-					# DATA Copy 
-					####################################################					
-
-					# copy previous iteration data									
-					print '#############################'
-					print ''
-					cmd=""" cp -r %sIter%s/*  %s"""%(self.outputDir,self.i-1,self.IterDir)
-					print cmd
-					os.system(cmd)
-					
-							
-					################################################################
+					# DATA copy AND
+					#
 					# Copy the CORRECTED_DATA column in the DATA Column is 
 					# propagateSolution = yes => propagate the Solution
-					################################################################	
+					####################################################	
 
 					# From data
 					if self.outerfovclean =='no':
-						
 							for k in range(self.NbFiles):
-									self.copy_data_invert("""%s%s"""%(self.IterDir,self.Files[k]))
-							
+									cmd=""" cp -r %sIter%s/%s  %s"""%(self.outputDir,self.i-1,self.Files[k],self.IterDir)
+									print cmd
+									os.system(cmd)									
+									self.copy_data_invert("""%s%s"""%(self.IterDir,self.Files[k]))							
 					print ''		
 					print '#############################'
 
 
 					# From PreProcessing directory		
-					if self.outerfovclean =='yes':																																		
-
+					if self.outerfovclean =='yes':
 							for k in range(self.NbFiles):
-									self.copy_data_invert("""%s%s_sub%s"""%(self.IterDir,self.Files[k],self.preprocessIndex))
-							
+									cmd=""" cp -r %sIter%s/%s_sub%s  %s"""%(self.outputDir,self.i-1,self.Files[k],self.preprocessIndex,self.IterDir)
+									print cmd
+									os.system(cmd)									
+									self.copy_data_invert("""%s%s_sub%s"""%(self.IterDir,self.Files[k],self.preprocessIndex))				
 					print ''		
 					print '#############################'	
 
