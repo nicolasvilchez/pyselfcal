@@ -510,7 +510,7 @@ class selfCalRun:
 		cmd4	= """steps=[gaincal]\n"""
 		cmd5	= """gaincal.type=gaincal\n"""
 		cmd6	= """gaincal.caltype=phaseonly\n"""
-		cmd8	= """gaincal.usebeammodel=false\n"""
+		cmd8	= """gaincal.usebeammodel=true\n"""
 		cmd9	= """gaincal.tolerance=1.e-5\n"""
 		cmd11	= """gaincal.maxiter=200\n"""
 				
